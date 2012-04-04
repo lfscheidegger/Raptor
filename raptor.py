@@ -134,6 +134,27 @@ def push_callback():
         # some errors/warnings, let's talk to the user
         return prompt('Linter raised unresolved issues. Continue?', False)
 
+def lint_callback():
+    """
+    lint_callback() -> int
+    runs custom callback to just check the linter
+    """
+
+    err_code = 0
+    git_files = subprocess.Popen(
+        ['git', 'diff', '--name-status'],
+        stdout=subprocess.PIPE).communicate()[0]
+
+    for line in str(git_files).strip().split('\n'):
+        err_code += check_diff_line(line)
+
+    if err_code == 0:
+        print 'Linter raised no issues.'
+        sys.exit(0)
+    else:
+        print 'Linter raised unresolved issues.'
+        sys.exit(0)
+
 ## falls back to normal git if the command isn't being treated
 ## specifically
 def git_passthru():
@@ -146,7 +167,8 @@ def git_passthru():
 
 recognized_commands = {
     'commit': commit_callback,
-    'push': push_callback
+    'push': push_callback,
+    'lint': lint_callback
 }
 
 if command in recognized_commands:
