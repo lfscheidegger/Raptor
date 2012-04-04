@@ -47,7 +47,24 @@ def run_linter_py(filename):
 
     return status
 
-# callback to run before a git commit
+def check_diff_line(line):
+    """
+    check_diff_line(line: str) -> int
+    processes an individual git diff line and returns int return codes
+    """
+    line = line.strip()
+
+    # skip deleted files
+    if line.startswith('D'): return 0
+
+    # run pylint on the files
+    if len(line.split()) < 2: return 0
+
+    filename = line.split()[1]
+
+    if filename.endswith('.py'):
+        return run_linter_py(filename)
+
 def commit_callback():
     """
     commit_callback() -> bool
@@ -60,25 +77,62 @@ def commit_callback():
         stdout=subprocess.PIPE).communicate()[0]
 
     for line in str(git_files).strip().split('\n'):
-        line = line.strip()
+        err_code += check_diff_line(line)
 
-        # skip deleted files
-        if line.startswith('D'): continue
+    if err_code == 0:
+        # no errors or warnings, all good.
+        return True
+    else:
+        # some errors/warnings, let's talk to the user
+        return prompt('Linter raised unresolved issues. Continue?', False)
 
-        # run pylint on the files
-        if len(line.split()) < 2: continue
+def push_callback():
+    """
+    push_callback() -> bool
+    runs custom push hooks, returns True if everythink ok, False if should
+    abort.
+    """
 
-        filename = line.split()[1]
+    remote_name = sys.argv[2]
+    branch_name = sys.argv[3].split(':')[1]
 
-        if filename.endswith('.py'):
-            err_code += run_linter_py(filename)
+    [stdout, stderr] = subprocess.Popen(
+        ['git', 'diff', '--stat', '--name-status', 
+         '%s/%s' % (remote_name, branch_name)],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
-        if err_code == 0:
-            # no errors or warnings, all good.
-            return True
-        else:
-            # some errors/warnings, let's talk to the user
-            return prompt('Linter raised unresolved issues. Continue?', False)
+    stdout = str(stdout).strip()
+    stderr = str(stderr).strip()
+
+    if stderr.startswith('fatal'):
+        print 'remote has no branch "%s"' % (branch_name,), \
+            '- falling back to master'
+        [stdout, stderr] = \
+            subprocess.Popen(
+                 ['git', 'diff', '--stat',
+                  '--name-status', '%s/master' % (remote_name, )],
+                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)\
+            .communicate()
+
+        stdout = str(stdout).strip()
+        stderr = str(stderr).strip()
+
+        if stderr.startswith('fatal'):
+            print "couldn't push to master. bailing."
+            return False
+
+    err_code = 0
+
+    lines = stdout.split('\n')
+    for line in lines:
+        err_code += check_diff_line(line)
+
+    if err_code == 0:
+        # no errors or warnings, all good.
+        return True
+    else:
+        # some errors/warnings, let's talk to the user
+        return prompt('Linter raised unresolved issues. Continue?', False)
 
 ## falls back to normal git if the command isn't being treated
 ## specifically
@@ -91,7 +145,8 @@ def git_passthru():
     os.system(cmd)
 
 recognized_commands = {
-    'commit': commit_callback
+    'commit': commit_callback,
+    'push': push_callback
 }
 
 if command in recognized_commands:
