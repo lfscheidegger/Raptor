@@ -8,7 +8,7 @@ from src.bash_support import print_colored
 from src.bash_support import prompt
 from src.bash_support import run_command
 from src.git_support import get_diffed_files
-from src.jobs.lint import lint
+from src.jobs.lint import prompt_lint
 
 def callback(args):
     """
@@ -25,13 +25,6 @@ def callback(args):
     output = run_command(command)
     git_files = get_diffed_files(output['stdout'])
 
-    # runs linter
-    if not lint(git_files):
-        return prompt('Lint raised unresolved issues. Continue?', False)
-    else:
-        print_colored('Lint raised no issues', color='green')
-        return True
-
-    return False
+    return prompt_lint(git_files)
 
 exports = ('commit', callback)

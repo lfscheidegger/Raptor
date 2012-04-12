@@ -5,6 +5,7 @@ Lints diffed files based on the configured linter.
 """
 
 from src.bash_support import print_colored
+from src.bash_support import prompt
 from src.bash_support import call_command
 from src.config import get_config
 
@@ -36,3 +37,17 @@ def lint(files):
                 break
         
     return err_codes == 0
+
+def prompt_lint(files):
+    """
+    prompt_lint(files: [str]) -> boolean
+
+    Higher level wrapper around lint() which prompts user upon success
+    or failure.
+    """
+
+    if not lint(files):
+        return prompt('Lint raised unresolved issues. Continue?', False)
+    else:
+        print_colored('Lint raised no issues', color='green')
+        return True

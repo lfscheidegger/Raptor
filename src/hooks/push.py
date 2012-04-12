@@ -5,8 +5,8 @@ Callback for git push.
 """
 
 from src.bash_support import run_command
-
-
+from src.bash_support import call_command
+from src.jobs.lint import prompt_lint
 
 def callback(args):
     """
@@ -18,7 +18,10 @@ def callback(args):
     remote_name = args[2]
     branch_name = args[3].split(':')[1]
 
-    output = run_command('git diff --name-status %s/%s' %\
+    # fetch the remote so we have the most up-to-date information
+    call_command('git fetch %s' % (remote_name, ))
+
+    output = run_command('git diff HEAD %s/%s --name-status' %\
                              (remote_name, branch_name))
     
     stdout = output['stdout'].strip()
@@ -27,7 +30,7 @@ def callback(args):
     if stderr.startswith('fatal'):
         print 'remote has no branch "%s"' % (branch_name,), \
             '- falling back to master'
-        output = run_command('git diff --name-status %s/master' %\
+        output = run_command('git diff HEAD %s/master --name-status' %\
                                  (remote_name, ))
 
         stdout = output['stdout'].strip()
@@ -37,7 +40,7 @@ def callback(args):
             print "couldn't push to master. bailing."
             return False
 
-        
+    
 
 #     err_code = 0
 
