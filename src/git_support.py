@@ -42,10 +42,13 @@ def get_diffed_files(diff_output, **kwargs):
 
     lines = diff_output.strip().split('\n')
     for line in lines:
-        [status, filename] = line.split()
-        if status == 'D' and not include_deleted: 
-            continue
-        result.append(filename)
+        try:
+            [status, filename] = line.split()
+            if status == 'D' and not include_deleted: 
+                continue
+            result.append(filename)
+        except ValueError:
+            pass
 
     return result
 
