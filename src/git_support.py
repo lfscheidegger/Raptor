@@ -54,7 +54,5 @@ def passthrough(options):
     git_passthrough() -> None
     runs git with options passed to raptor.
     """
-    print 'PASSTHROUGH'
-
     cmd = 'git %s' % (' '.join(options))
     run_command(cmd, ignore_output=True)

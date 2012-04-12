@@ -40,7 +40,6 @@ def run_command(cmd, **kwargs):
     and stderr.
     """
     if kwargs.has_key('ignore_output'):
-        print 'cmd:', cmd
         subprocess.call(cmd.split())
     else:
         [stdout, stderr] = subprocess.Popen(
