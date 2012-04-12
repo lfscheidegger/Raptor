@@ -1,8 +1,22 @@
+"""
+lint.py
+
+Lints diffed files based on the configured linter.
+"""
+
 from src.bash_support import print_colored
 from src.bash_support import call_command
 from src.config import get_config
 
+import re
+
 def lint(files):
+    """
+    lint(files: [str]) -> boolean
+
+    Runs the configured linter for each file in files, and returns
+    True if no linter issues are found, False otherwise.
+    """
     config = get_config()
     try:
         lint_engine = config['linter']
@@ -14,7 +28,11 @@ def lint(files):
 
     err_codes = 0
     for filename in files:
-        cmd = '%s %s' % (lint_engine, filename)
-        err_codes += call_command(cmd)
+        for regex in lint_engine['patterns']:
+            if re.match(regex, filename):
+                cmd = '%s %s' % (lint_engine['command'], filename)
+                err_codes += call_command(cmd)
+
+                break
         
     return err_codes == 0

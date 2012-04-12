@@ -1,4 +1,10 @@
-from bash_support import run_command
+"""
+git_support.py
+
+Functions to interact with common git commands.
+"""
+
+from src.bash_support import run_command
 
 def get_aliases():
     """
@@ -15,7 +21,8 @@ def get_aliases():
     result = {}
 
     for alias in aliases:
-        if len(alias) == 0: continue
+        if len(alias) == 0: 
+            continue
         
         alias_name = alias.split()[0][6:]
         alias_value = alias.split(' ', 1)[1]
@@ -25,17 +32,19 @@ def get_aliases():
     return result
 
 def get_diffed_files(diff_output, **kwargs):
-
     include_deleted = False
-    try: include_deleted = kwargs['include_deleted']
-    except KeyError: pass
+    try: 
+        include_deleted = kwargs['include_deleted']
+    except KeyError: 
+        pass
 
     result = []
 
     lines = diff_output.strip().split('\n')
     for line in lines:
         [status, filename] = line.split()
-        if status == 'D' and not include_deleted: continue
+        if status == 'D' and not include_deleted: 
+            continue
         result.append(filename)
 
     return result
@@ -45,5 +54,7 @@ def passthrough(options):
     git_passthrough() -> None
     runs git with options passed to raptor.
     """
+    print 'PASSTHROUGH'
+
     cmd = 'git %s' % (' '.join(options))
     run_command(cmd, ignore_output=True)

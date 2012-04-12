@@ -1,3 +1,8 @@
+"""
+bash_support.py
+miscellaneous functions to interact with a bash shell.
+"""
+
 import subprocess
 
 color_code_map = {
@@ -14,6 +19,11 @@ color_code_map = {
 }
 
 def print_colored(*args, **kwargs):
+    """
+    print_colore(args: [str,], kwargs: { color: str }) -> None
+
+    Similar to native print, but prints a colored message.
+    """
     color = color_code_map['none']
     try:
         color = color_code_map[kwargs['color']]
@@ -23,9 +33,15 @@ def print_colored(*args, **kwargs):
     print color + ' '.join(args) + color_code_map['none']
 
 def run_command(cmd, **kwargs):
+    """
+    run_command(cmd: string, kwargs: { ignore_output: boolean }) -> { stdout: str, stderr: str }
+
+    Runs the command under 'cmd' and returns a dictionary with stdout
+    and stderr.
+    """
     if kwargs.has_key('ignore_output'):
-        subprocess.Popen(
-            cmd.split())
+        print 'cmd:', cmd
+        subprocess.call(cmd.split())
     else:
         [stdout, stderr] = subprocess.Popen(
             cmd.split(),
@@ -37,11 +53,17 @@ def run_command(cmd, **kwargs):
             }
 
 def call_command(cmd):
+    """
+    call_command(cmd: str) -> int
+    
+    Calls the command cmd and returns its exit code.
+    """
     return subprocess.call(cmd.split())
 
 def prompt(message, default):
     """
     prompt(message: str, default: bool) -> bool
+
     Prompts user with a yes/no message and default choice
     """
     message += (' [Y/n]: ' if default else ' [y/N]: ')
@@ -57,4 +79,5 @@ def prompt(message, default):
             return False
         else:
             result = raw_input("Please answer 'y' or 'n': ")
-            if result == "": result = 'x'
+            if result == "": 
+                result = 'x'

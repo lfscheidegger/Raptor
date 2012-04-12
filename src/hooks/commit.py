@@ -1,3 +1,9 @@
+"""
+commit.py
+
+Callback for a custom git pre-commit hook.
+"""
+
 from src.bash_support import print_colored
 from src.bash_support import prompt
 from src.bash_support import run_command
@@ -10,8 +16,6 @@ def callback(args):
     runs custom commit hooks, returns True if everything ok, False if should
     abort.
     """
-    err_code = 0
-
     command = ''
     if '-a' in args or '--all' in args:
         command = 'git diff HEAD --name-status'

@@ -1,3 +1,8 @@
+"""
+setup.py
+Setup script to install raptor.
+"""
+
 from setuptools import setup
 
 setup(

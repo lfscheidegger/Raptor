@@ -1,3 +1,6 @@
 {
-  "linter" : "pylint"
+  "linter" : {
+    "patterns": [".*.py"],
+    "command": "pylint"
+  }
 }
