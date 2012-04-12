@@ -6,6 +6,7 @@ Callback for git push.
 
 from src.bash_support import run_command
 from src.bash_support import call_command
+from src.git_support import get_diffed_files
 from src.jobs.lint import prompt_lint
 
 def callback(args):
@@ -40,19 +41,7 @@ def callback(args):
             print "couldn't push to master. bailing."
             return False
 
-    
+    git_files = get_diffed_files(stdout)
+    return prompt_lint(git_files)
 
-#     err_code = 0
-
-#     lines = stdout.split('\n')
-#     for line in lines:
-#         err_code += check_diff_line(line)
-
-#     if err_code == 0:
-#         # no errors or warnings, all good.
-#         return True
-#     else:
-#         # some errors/warnings, let's talk to the user
-#         return prompt('Linter raised unresolved issues. Continue?', False)
-
-# exports = ('push', callback)
+exports = ('push', callback)
