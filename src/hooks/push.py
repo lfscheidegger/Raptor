@@ -4,36 +4,40 @@ push.py
 Callback for git push.
 """
 
-# from src.bash_support import run_command
+from src.bash_support import run_command
 
-# def callback(args):
-#     """
-#     push_callback() -> bool
-#     runs custom push hooks, returns True if everythink ok, False if should
-#     abort.
-#     """
 
-#     remote_name = args[2]
-#     branch_name = args[3].split(':')[1]
 
-#     output = run_command('git diff --stat --name-status %s/%s' %\
-#                              (remote_name, branch_name))
+def callback(args):
+    """
+    push_callback() -> bool
+    runs custom push hooks, returns True if everythink ok, False if should
+    abort.
+    """
+
+    remote_name = args[2]
+    branch_name = args[3].split(':')[1]
+
+    output = run_command('git diff --name-status %s/%s' %\
+                             (remote_name, branch_name))
     
-#     stdout = output['stdout'].strip()
-#     stderr = output['stderr'].strip()
+    stdout = output['stdout'].strip()
+    stderr = output['stderr'].strip()
 
-#     if stderr.startswith('fatal'):
-#         print 'remote has no branch "%s"' % (branch_name,), \
-#             '- falling back to master'
-#         output = run_command('git diff --stat --name-status %s/master' %\
-#                                  (remote_name, ))
+    if stderr.startswith('fatal'):
+        print 'remote has no branch "%s"' % (branch_name,), \
+            '- falling back to master'
+        output = run_command('git diff --name-status %s/master' %\
+                                 (remote_name, ))
 
-#         stdout = output['stdout'].strip()
-#         stderr = output['stderr'].strip()
+        stdout = output['stdout'].strip()
+        stderr = output['stderr'].strip()
 
-#         if stderr.startswith('fatal'):
-#             print "couldn't push to master. bailing."
-#             return False
+        if stderr.startswith('fatal'):
+            print "couldn't push to master. bailing."
+            return False
+
+        
 
 #     err_code = 0
 

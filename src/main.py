@@ -10,7 +10,7 @@ from src.bash_support import print_colored
 from src.git_support  import get_aliases
 from src.git_support import passthrough
 from src.hooks.commit import exports as commit_exports
-#from src.hooks.push   import exports as push_exports
+from src.hooks.push   import exports as push_exports
 #from src.hooks.lint   import exports as lint_exports
 
 def usage():
@@ -43,7 +43,7 @@ def main():
 
     recognized_commands = {
         commit_exports[0]: commit_exports[1],
-        #push_exports[0]  : push_exports[1],
+        push_exports[0]  : push_exports[1],
         #lint_exports[0]  : lint_exports[1]
     }
 
