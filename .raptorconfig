@@ -1,6 +1,12 @@
 {
-  "linter" : {
-    "patterns": [".*.py"],
-    "command": "pylint"
-  }
+  "linter" : [
+    {
+      "pattern": ".*.py",
+      "command": "pylint"
+    },
+    {
+      "pattern": ".*.js",
+      "command": "jsgrep"
+    }
+  ]
 }

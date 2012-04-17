@@ -29,11 +29,12 @@ def lint(files):
 
     err_codes = 0
     for filename in files:
-        for regex in lint_engine['patterns']:
+        for lint_rule in lint_engine:
+            regex = lint_rule['pattern']
             if re.match(regex, filename):
-                cmd = '%s %s' % (lint_engine['command'], filename)
+                linter = lint_rule['command']
+                cmd = '%s %s' % (linter, filename)
                 err_codes += call_command(cmd)
-
                 break
         
     return err_codes == 0
