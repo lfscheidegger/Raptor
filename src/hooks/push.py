@@ -6,6 +6,7 @@ Callback for git push.
 
 from src.bash_support import run_command
 from src.bash_support import call_command
+from src.bash_support import print_colored
 from src.git_support import get_diffed_files
 from src.jobs.lint import prompt_lint
 
@@ -16,8 +17,13 @@ def callback(args):
     abort.
     """
 
-    remote_name = args[2]
-    branch_name = args[3].split(':')[1]
+    try:
+        remote_name = args[2]
+        branch_name = args[3].split(':')[1]
+    except IndexError:
+        print_colored('Raptor doesnt support pushing without '+\
+                      'arguments (yet). Sadface.', color='red')
+        return False
 
     # fetch the remote so we have the most up-to-date information
     call_command('git fetch %s' % (remote_name, ))
