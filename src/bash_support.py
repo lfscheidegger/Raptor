@@ -1,3 +1,6 @@
+# Raptor - smart hooks for git
+# Copyright (C) 2012 Luiz Scheidegger
+
 """
 bash_support.py
 miscellaneous functions to interact with a bash shell.
