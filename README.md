@@ -4,6 +4,7 @@ Raptor is a python utility that wraps around common git commands to
 provide slightly better hooks.
 
 git hooks have two main drawbacks:
+
 1 - they can't take user input. Because they run from within git, it's
 impossible to write a hook that, for instance, runs a linter (or unit
 tests), and prompts the user to continue or abort. Git hooks can only
@@ -26,10 +27,12 @@ tl;dr - just replace 'git' by 'raptor' wherever you want to use
 raptor. So for instance, you can
 
 $ raptor checkout master
+
 $ raptor rebase origin/master
+
 $ raptor diff
 
-instead of using vanilla git
+instead of using vanilla git.
 
 ### Installation ###
 
@@ -37,7 +40,13 @@ Assuming you're running on a machine with setuptools,
 
 $ sudo python setup.py install
 
+After this you should just be able to run
+
+$ raptor
+
+in your bash.
+
 ### Contact info ###
 
 Questions, suggestions, harshly worded criticisms and the like should
-be sent to luiz.scheidegger@gmail.com
+be sent to luiz.scheidegger@gmail.com.
