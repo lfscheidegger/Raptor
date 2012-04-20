@@ -70,7 +70,6 @@ def main():
         else:
             print_colored('Raptor raised unresolved issues.', color='red')
     else:
-        print_colored('Uncaptured command. Defaulting to git...', color='green')
         passthrough(options)
 
 if __name__ == '__main__':
