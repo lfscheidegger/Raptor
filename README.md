@@ -46,6 +46,17 @@ $ raptor
 
 in your bash.
 
+### Aliasing ###
+Even after you have Raptor installed, if you run vanilla git, it will
+run its commands without going through raptor. If you're like me and
+are used to typing git all the time, you can copy this line into your
+.bashrc file:
+
+alias git='raptor'
+
+to set up a local alias from git to raptor. This way, whenever you
+type git, bash will actually run raptor.
+
 ### Contact info ###
 
 Questions, suggestions, harshly worded criticisms and the like should
