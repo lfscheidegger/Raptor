@@ -7,7 +7,7 @@ git_support.py
 Functions to interact with common git commands.
 """
 
-from src.bash_support import run_command
+from raptor.src.bash_support import run_command
 
 def get_aliases():
     """

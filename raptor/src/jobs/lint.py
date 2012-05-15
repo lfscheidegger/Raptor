@@ -7,10 +7,10 @@ lint.py
 Lints diffed files based on the configured linter.
 """
 
-from src.bash_support import print_colored
-from src.bash_support import prompt
-from src.bash_support import call_command
-from src.config import get_config
+from raptor.src.bash_support import print_colored
+from raptor.src.bash_support import prompt
+from raptor.src.bash_support import call_command
+from raptor.src.config import get_config
 
 import re
 

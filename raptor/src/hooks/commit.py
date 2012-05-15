@@ -7,9 +7,9 @@ commit.py
 Callback for a custom git pre-commit hook.
 """
 
-from src.bash_support import run_command
-from src.git_support import get_diffed_files
-from src.jobs.lint import prompt_lint
+from raptor.src.bash_support import run_command
+from raptor.src.git_support import get_diffed_files
+from raptor.src.jobs.lint import prompt_lint
 
 def callback(args):
     """
